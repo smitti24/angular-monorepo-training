@@ -1,0 +1,25 @@
+<h2>Task Tracker</h2>
+
+<div>
+    <input #newTask placeholder="New task..." />
+    <button (click)="addTask(newTask.value); newTask.value = ''">Add</button>
+</div>
+@let statsData = stats();
+
+<div>
+    <button (click)="filter.set('all')">All ({{ statsData.total }})</button>
+    <button (click)="filter.set('active')">Active ({{ statsData.remaining }})</button>
+    <button (click)="filter.set('completed')">Done ({{ statsData.done }})</button>
+</div>
+
+<ul>
+    @for (task of filteredTasks(); track task.id) {
+    <li>
+        <input type="checkbox" [checked]="task.done" (change)="toggleTask(task.id)" />
+        <span [style.text-decoration]="task.done ? 'line-through' : 'none'">{{ task.title }}</span>
+        <button (click)="removeTask(task.id)">x</button>
+    </li>
+    } @empty {
+    <li>No tasks found</li>
+    }
+</ul>

@@ -54,7 +54,7 @@
 | Module | Topic | Lessons | Status |
 |--------|-------|---------|--------|
 | 1 | NX Fundamentals | 5 | ✅ Complete |
-| 2 | Angular Signals Deep Dive | 4 | ⬜ Not Started |
+| 2 | Angular Signals Deep Dive | 4 | 🟡 In Progress |
 | 3 | NX Libraries & Architecture | 4 | ⬜ Not Started |
 | 4 | Tailwind in NX | 2 | ⬜ Not Started |
 | 5 | Storybook in NX | 4 | ⬜ Not Started |
@@ -83,8 +83,8 @@
 ### Module 2: Angular Signals Deep Dive
 | Lesson | Topic | Status |
 |--------|-------|--------|
-| 2.1 | Signals vs Observables - When to Use What | ⬜ Not Started |
-| 2.2 | signal(), computed(), effect() | ⬜ Not Started |
+| 2.1 | Signals vs Observables - When to Use What | ✅ Complete |
+| 2.2 | signal(), computed(), effect() | 🟡 In Progress |
 | 2.3 | Input Signals & Model Signals | ⬜ Not Started |
 | 2.4 | Signal-based State Management Patterns | ⬜ Not Started |
 
@@ -169,8 +169,8 @@
 ## Current Position
 
 **Module:** 2 - Angular Signals Deep Dive
-**Lesson:** 2.1 - Signals vs Observables - When to Use What
-**Status:** ⬜ Not Started
+**Lesson:** 2.2 - signal(), computed(), effect()
+**Status:** 🟡 In Progress
 
 ---
 
@@ -236,6 +236,28 @@
 - Parallel execution is automatic; control with `--parallel=N`
 - `nx reset` fixes SQLite cache corruption (common after version migrations)
 - At scale: affected + caching can reduce CI from 30min to < 3min
+
+### Lesson 2.1
+- Signals = synchronous reactive primitives; always have current value; read by calling `signal()`
+- Observables = push-based async streams; signals = pull-based reactive values
+- Signals solve change detection: fine-grained reactivity replaces zone.js tree checking
+- **Decision rule**: state → signals, streams → Observables
+- Replace `BehaviorSubject + getValue() + next()` patterns with signals
+- Keep `pipe()` with operators (switchMap, debounceTime, etc.) as Observables
+- `toSignal()` bridges Observables into signal world; `toObservable()` bridges signals into RxJS
+- Angular signal APIs: `signal()`, `computed()`, `effect()`, `input()`, `output()`, `model()`, `viewChild()`, `contentChild()`
+- `HttpClient`, Router events, FormControl.valueChanges remain Observable-based
+- Team one-liner: "Use signals for state, Observables for streams"
+
+### Lesson 2.2
+- `signal()` = mutable state, read by calling, write with `set()`/`update()`
+- `computed()` = derived read-only state, lazy, cached, auto-tracks dependencies, must be pure
+- `effect()` = side effects, runs in injection context (constructor/field initializer), auto-tracks
+- Immutable updates: always return new references from `update()` for objects/arrays
+- `readonly` on signal fields prevents reassignment of the signal reference
+- `@let` in templates to read a signal once and reuse (avoids multiple calls)
+- `@for` with `track` for list rendering (replaces `*ngFor` + `trackBy`)
+- Built task-tracker component demonstrating all three primitives together
 
 ---
 
@@ -354,4 +376,4 @@ A: No. The standard is NX workspace at the **root** of the git repo. Nesting cau
 
 ---
 
-*Last updated: 2026-02-10 - Module 1 complete, ready for Module 2: Angular Signals Deep Dive*
+*Last updated: 2026-02-10 - Lesson 2.2 complete, task-tracker component built with signal/computed/effect*
