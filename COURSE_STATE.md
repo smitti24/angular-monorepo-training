@@ -54,7 +54,7 @@
 | Module | Topic | Lessons | Status |
 |--------|-------|---------|--------|
 | 1 | NX Fundamentals | 5 | ✅ Complete |
-| 2 | Angular Signals Deep Dive | 4 | 🟡 In Progress |
+| 2 | Angular Signals Deep Dive | 4 | ✅ Complete |
 | 3 | NX Libraries & Architecture | 4 | ⬜ Not Started |
 | 4 | Tailwind in NX | 2 | ⬜ Not Started |
 | 5 | Storybook in NX | 4 | ⬜ Not Started |
@@ -85,8 +85,8 @@
 |--------|-------|--------|
 | 2.1 | Signals vs Observables - When to Use What | ✅ Complete |
 | 2.2 | signal(), computed(), effect() | ✅ Complete |
-| 2.3 | Input Signals & Model Signals | 🟡 In Progress |
-| 2.4 | Signal-based State Management Patterns | ⬜ Not Started |
+| 2.3 | Input Signals & Model Signals | ✅ Complete |
+| 2.4 | Signal-based State Management Patterns | ✅ Complete |
 
 ### Module 3: NX Libraries & Architecture
 | Lesson | Topic | Status |
@@ -168,9 +168,9 @@
 
 ## Current Position
 
-**Module:** 2 - Angular Signals Deep Dive
-**Lesson:** 2.3 - Input Signals & Model Signals
-**Status:** 🟡 In Progress
+**Module:** 3 - NX Libraries & Architecture
+**Lesson:** 3.1 - Library Types (Feature, UI, Data-Access, Util)
+**Status:** ⬜ Not Started
 
 ---
 
@@ -268,6 +268,17 @@
 - Refactored task-tracker into parent/child: TaskItem (input + output), TaskFilter (model + input)
 - Student organized children under `components/` subfolder — good feature folder structure
 - Student consistently uses `@let` to read signals once in templates
+
+### Lesson 2.4
+- Signal store pattern: private writable signals + public `asReadonly()` + named mutation methods
+- `asReadonly()` prevents consumers from bypassing store methods to mutate state directly
+- Computed/derived state lives in the store — shared across all consumers
+- `providedIn: 'root'` = singleton; component-level `providers` = scoped instance per component
+- Effects belong in components (view concerns), not stores (pure state containers)
+- Component becomes thin: `inject(Store)`, expose signals, delegate mutations
+- Template stays unchanged when extracting to store = good separation
+- For most Angular apps, signal stores replace NgRx/Akita; consider NgRx Signal Store for dev tools/middleware
+- Student placed store in `store/` subfolder — good organization
 
 ---
 

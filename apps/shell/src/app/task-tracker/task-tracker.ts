@@ -1,7 +1,7 @@
-import { Component, computed, effect, signal } from '@angular/core';
-import { Task } from './task';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { TaskItem } from './components/task-item/task-item';
 import { TaskFilter } from './components/task-filter/task-filter';
+import { TaskStore } from './store/task.store';
 
 @Component({
   selector: 'app-task-tracker',
@@ -10,60 +10,39 @@ import { TaskFilter } from './components/task-filter/task-filter';
   styleUrl: './task-tracker.css',
 })
 export class TaskTracker {
-  readonly tasks = signal<Task[]>([
-    { id: 1, title: 'Learn signals', done: true },
-    { id: 2, title: 'Build with NX', done: false },
-    { id: 3, title: 'Setup microfrontends', done: false },
-  ])
+  private readonly taskStore = inject(TaskStore)
+  readonly tasks = this.taskStore.tasks
+  readonly stats = this.taskStore.stats
 
-  readonly filter = signal<'all' | 'active' | 'completed'>('all')
+  readonly filter = signal<'all' | 'active' | 'completed'>('all');
 
   readonly filteredTasks = computed(() => {
     const tasks = this.tasks();
-
     switch (this.filter()) {
-      case 'active': return tasks.filter(task => !task.done)
-      case 'completed': return tasks.filter(task => task.done)
+      case 'active': return tasks.filter(t => !t.done);
+      case 'completed': return tasks.filter(t => t.done);
       default: return tasks;
     }
-  })
+  });
 
-  readonly stats = computed(() => {
-    const tasks = this.tasks();
-    const done = tasks.filter(task => task.done)
-
-    return {
-      total: tasks.length,
-      done: done.length,
-      remaining: tasks.length - done.length
-    }
-  })
 
   constructor(){
     effect(() => {
-      const stats = this.stats()
-      console.log(`Tasks: ${stats.done}/${stats.total} complete`);
+      const stats = this.stats
+      console.log(`Tasks: ${stats().done}/${stats().total} complete`);
     })
   }
 
-  addTask(title: string): void {
-    if (!title.trim()) return;
-
-    this.tasks.update(tasks => [...tasks, {
-      id: Date.now(),
-      title,
-      done: false
-    }])
-  }
 
   toggleTask(id: number): void {
-    this.tasks.update(tasks => tasks.map(t => t.id === id ? {
-      ...t,
-      done: !t.done
-    }: t))
+    this.taskStore.toggleTask(id)
+  }
+
+  addTask(title: string): void {
+    this.taskStore.addTask(title)
   }
 
   removeTask(id: number): void {
-    this.tasks.update(tasks => tasks.filter(t => t.id !== id))
+    this.taskStore.removeTask(id)
   }
 }
