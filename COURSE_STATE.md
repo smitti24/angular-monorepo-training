@@ -75,9 +75,9 @@
 | Lesson | Topic | Status |
 |--------|-------|--------|
 | 1.1 | What is NX? Monorepo Philosophy | ✅ Complete |
-| 1.2 | Creating Your First NX Workspace | 🟡 In Progress |
-| 1.3 | NX CLI & Essential Commands | ⬜ Not Started |
-| 1.4 | Understanding nx.json & project.json | ⬜ Not Started |
+| 1.2 | Creating Your First NX Workspace | ✅ Complete |
+| 1.3 | NX CLI & Essential Commands | ✅ Complete |
+| 1.4 | Understanding nx.json & project.json | 🟡 In Progress |
 | 1.5 | Dependency Graph & Affected Commands | ⬜ Not Started |
 
 ### Module 2: Angular Signals Deep Dive
@@ -169,7 +169,7 @@
 ## Current Position
 
 **Module:** 1 - NX Fundamentals
-**Lesson:** 1.2 - Creating Your First NX Workspace
+**Lesson:** 1.3 - NX CLI & Essential Commands
 **Status:** 🟡 In Progress
 
 ---
@@ -200,6 +200,18 @@
 - **esbuild** chosen for fast dev builds; will switch to **webpack** when adding Module Federation (Module 7)
 - `"dependsOn": ["^build"]` means NX builds dependencies before the app (topological ordering)
 - `"cache": true` on targets enables NX computation caching
+
+### Lesson 1.3
+- CLI pattern: `nx <command> [project] [options]`
+- Three command categories: task runners, code generation, workspace info
+- `nx run project:target:config` = explicit form; `nx target project` = shorthand
+- `run-many -t <target>` runs across all projects — essential for CI
+- `nx graph` visualizes project dependency graph in browser
+- `--dry-run` on generators previews without writing files
+- NX caching: hashes inputs, replays output if nothing changed (instant second runs)
+- `nx reset` clears cache; `nx report` shows plugin versions for debugging
+- **Version management**: always use `nx migrate` to upgrade — never manually bump @nx/* versions
+- `migrations.json` may be created during migration — run `nx migrate --run-migrations` then delete it
 
 ---
 
@@ -249,6 +261,19 @@ npx nx generate @nx/angular:application --name=shell  # Generate a new Angular a
 npx nx serve shell                                    # Serve an app locally (default: http://localhost:4200)
 # Generator options used: --directory=apps/shell --style=css --routing=true --standalone=true --prefix=app --ssr=false
 # Interactive choices: angular-vitest, playwright, esbuild
+
+# Lesson 1.3
+npx nx show projects                                  # List all projects
+npx nx show project shell                             # Show resolved config for a project
+npx nx run shell:test                                 # Run target (explicit: project:target:config)
+npx nx test shell                                     # Run target (shorthand)
+npx nx run-many -t test                               # Run target on ALL projects
+npx nx graph                                          # Interactive dependency graph
+npx nx list @nx/angular                               # Show generators & executors
+npx nx generate ... --dry-run                         # Preview generator output
+npx nx report                                         # Show plugin versions
+npx nx reset                                          # Clear NX cache
+npx nx migrate nx@<version>                           # Upgrade NX (aligns all @nx/* packages)
 ```
 
 ---
@@ -294,8 +319,8 @@ A: No. The standard is NX workspace at the **root** of the git repo. Nesting cau
 | Date | Update |
 |------|--------|
 | Session 1 | Course initialized, ready to begin Module 1 |
-| Session 2 | Added Module 5: Storybook in NX (4 lessons), renumbered Modules 5-12 → 6-13 |
+| Session 2 | Added Module 5: Storybook in NX (4 lessons), renumbered Modules 5-12 → 6-13. Lessons 1.2-1.3 delivered. |
 
 ---
 
-*Last updated: 2026-02-10 - Lesson 1.2 delivered, shell app generated and running, awaiting NEXT to proceed to 1.3*
+*Last updated: 2026-02-10 - Lesson 1.3 delivered, CLI commands covered, version mismatch resolved with nx migrate*
