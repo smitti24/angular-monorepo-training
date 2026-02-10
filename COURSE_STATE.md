@@ -53,7 +53,7 @@
 
 | Module | Topic | Lessons | Status |
 |--------|-------|---------|--------|
-| 1 | NX Fundamentals | 5 | ⬜ Not Started |
+| 1 | NX Fundamentals | 5 | ✅ Complete |
 | 2 | Angular Signals Deep Dive | 4 | ⬜ Not Started |
 | 3 | NX Libraries & Architecture | 4 | ⬜ Not Started |
 | 4 | Tailwind in NX | 2 | ⬜ Not Started |
@@ -78,7 +78,7 @@
 | 1.2 | Creating Your First NX Workspace | ✅ Complete |
 | 1.3 | NX CLI & Essential Commands | ✅ Complete |
 | 1.4 | Understanding nx.json & project.json | ✅ Complete |
-| 1.5 | Dependency Graph & Affected Commands | 🟡 In Progress |
+| 1.5 | Dependency Graph & Affected Commands | ✅ Complete |
 
 ### Module 2: Angular Signals Deep Dive
 | Lesson | Topic | Status |
@@ -168,9 +168,9 @@
 
 ## Current Position
 
-**Module:** 1 - NX Fundamentals
-**Lesson:** 1.5 - Dependency Graph & Affected Commands
-**Status:** 🟡 In Progress
+**Module:** 2 - Angular Signals Deep Dive
+**Lesson:** 2.1 - Signals vs Observables - When to Use What
+**Status:** ⬜ Not Started
 
 ---
 
@@ -226,6 +226,16 @@
 - **tsconfig.base.json `paths`** enables clean cross-project imports — auto-populated by generators
 - tsconfig inheritance: `tsconfig.base.json` → `tsconfig.json` → `tsconfig.app.json` / `tsconfig.spec.json`
 - `defaultBase` in nx.json = git branch for `nx affected` comparisons
+
+### Lesson 1.5
+- NX dependency graph built from: TypeScript imports, `dependsOn` config, `implicitDependencies`
+- `nx graph` visualizes all project relationships; `nx graph --affected` shows only affected subgraph
+- **`affected` vs `run-many`**: affected only runs tasks on projects impacted by changes (vs all projects)
+- `affected` compares current branch to `defaultBase` (main), maps changed files → projects → downstream deps
+- `nx show projects --affected` lists affected project names
+- Parallel execution is automatic; control with `--parallel=N`
+- `nx reset` fixes SQLite cache corruption (common after version migrations)
+- At scale: affected + caching can reduce CI from 30min to < 3min
 
 ---
 
@@ -288,6 +298,13 @@ npx nx generate ... --dry-run                         # Preview generator output
 npx nx report                                         # Show plugin versions
 npx nx reset                                          # Clear NX cache
 npx nx migrate nx@<version>                           # Upgrade NX (aligns all @nx/* packages)
+
+# Lesson 1.5
+npx nx affected -t test                               # Run target on affected projects only
+npx nx affected -t test,lint,build                    # Multiple targets on affected
+npx nx show projects --affected                       # List affected project names
+npx nx graph --affected                               # Visualize affected subgraph
+npx nx affected -t test --parallel=5                  # Control parallelism
 ```
 
 ---
@@ -333,8 +350,8 @@ A: No. The standard is NX workspace at the **root** of the git repo. Nesting cau
 | Date | Update |
 |------|--------|
 | Session 1 | Course initialized, ready to begin Module 1 |
-| Session 2 | Added Module 5: Storybook in NX (4 lessons), renumbered Modules 5-12 → 6-13. Lessons 1.2-1.3 delivered. |
+| Session 2 | Added Module 5: Storybook in NX. Completed Module 1 (Lessons 1.2-1.5). |
 
 ---
 
-*Last updated: 2026-02-10 - Lesson 1.4 delivered, nx.json & project.json deep dive*
+*Last updated: 2026-02-10 - Module 1 complete, ready for Module 2: Angular Signals Deep Dive*
