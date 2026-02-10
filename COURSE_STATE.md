@@ -169,7 +169,7 @@
 ## Current Position
 
 **Module:** 1 - NX Fundamentals
-**Lesson:** 1.3 - NX CLI & Essential Commands
+**Lesson:** 1.4 - Understanding nx.json & project.json
 **Status:** 🟡 In Progress
 
 ---
@@ -212,6 +212,20 @@
 - `nx reset` clears cache; `nx report` shows plugin versions for debugging
 - **Version management**: always use `nx migrate` to upgrade — never manually bump @nx/* versions
 - `migrations.json` may be created during migration — run `nx migrate --run-migrations` then delete it
+
+### Lesson 1.4
+- Config inheritance: nx.json (workspace) → project.json (project) → `nx show project` (resolved)
+- **namedInputs** control cache invalidation: `default` (all files), `production` (excludes lint config), `sharedGlobals` (workspace-wide)
+- `!` prefix in inputs = exclude; `^` prefix = upstream dependencies
+- **targetDefaults** apply to every project using that executor — `cache`, `dependsOn`, `inputs`
+- Build uses `production` inputs, test uses `default` inputs (different cache granularity)
+- **Plugins auto-infer targets** from config files — Playwright sees `playwright.config.ts`, ESLint sees `eslint.config.mjs`
+- Configuration merge: `options` (base) + `configurations.<name>` (overrides) = final config
+- `serve` delegates to `build` via `buildTarget: "shell:build:development"` — no config duplication
+- `outputs` tells NX where artifacts go for cache restoration
+- **tsconfig.base.json `paths`** enables clean cross-project imports — auto-populated by generators
+- tsconfig inheritance: `tsconfig.base.json` → `tsconfig.json` → `tsconfig.app.json` / `tsconfig.spec.json`
+- `defaultBase` in nx.json = git branch for `nx affected` comparisons
 
 ---
 
@@ -323,4 +337,4 @@ A: No. The standard is NX workspace at the **root** of the git repo. Nesting cau
 
 ---
 
-*Last updated: 2026-02-10 - Lesson 1.3 delivered, CLI commands covered, version mismatch resolved with nx migrate*
+*Last updated: 2026-02-10 - Lesson 1.4 delivered, nx.json & project.json deep dive*
