@@ -397,4 +397,4 @@ A: No. The standard is NX workspace at the **root** of the git repo. Nesting cau
 
 ---
 
-*Last updated: 2026-02-10 - Lesson 2.3 complete, refactored task-tracker with input/output/model signals*
+*Last updated: 2026-02-10 - Module 2 complete, ready for Module 3: NX Libraries & Architecture*
