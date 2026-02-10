@@ -1,0 +1,7 @@
+@let statsData = stats();
+
+<div>
+    <button (click)="filter.set('all')">All ({{ statsData.total }})</button>
+    <button (click)="filter.set('active')">Active ({{ statsData.remaining }})</button>
+    <button (click)="filter.set('completed')">Done ({{ statsData.done }})</button>
+</div>

@@ -1,0 +1,6 @@
+@let item = task();
+<li>
+    <input type="checkbox" [checked]="item.done" (change)="onToggleTask(item.id)" />
+    <span [style.text-decoration]="item.done ? 'line-through' : 'none'">{{ item.title }}</span>
+    <button (click)="onRemoveTask(item.id)">x</button>
+</li>

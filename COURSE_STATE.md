@@ -84,8 +84,8 @@
 | Lesson | Topic | Status |
 |--------|-------|--------|
 | 2.1 | Signals vs Observables - When to Use What | ✅ Complete |
-| 2.2 | signal(), computed(), effect() | 🟡 In Progress |
-| 2.3 | Input Signals & Model Signals | ⬜ Not Started |
+| 2.2 | signal(), computed(), effect() | ✅ Complete |
+| 2.3 | Input Signals & Model Signals | 🟡 In Progress |
 | 2.4 | Signal-based State Management Patterns | ⬜ Not Started |
 
 ### Module 3: NX Libraries & Architecture
@@ -169,7 +169,7 @@
 ## Current Position
 
 **Module:** 2 - Angular Signals Deep Dive
-**Lesson:** 2.2 - signal(), computed(), effect()
+**Lesson:** 2.3 - Input Signals & Model Signals
 **Status:** 🟡 In Progress
 
 ---
@@ -258,6 +258,16 @@
 - `@let` in templates to read a signal once and reuse (avoids multiple calls)
 - `@for` with `track` for list rendering (replaces `*ngFor` + `trackBy`)
 - Built task-tracker component demonstrating all three primitives together
+
+### Lesson 2.3
+- `input()` / `input.required()` replaces `@Input()` — inputs are now signals, usable in computed/effect
+- `output()` replaces `@Output()` — cleaner syntax, not a signal, same template behavior
+- `model()` / `model.required()` = two-way binding signal, syncs parent ↔ child automatically
+- `[(prop)]="signal"` is two-way binding syntax for model signals
+- Input signals eliminate need for `ngOnChanges` — use `computed()` to react to input changes
+- Refactored task-tracker into parent/child: TaskItem (input + output), TaskFilter (model + input)
+- Student organized children under `components/` subfolder — good feature folder structure
+- Student consistently uses `@let` to read signals once in templates
 
 ---
 
@@ -376,4 +386,4 @@ A: No. The standard is NX workspace at the **root** of the git repo. Nesting cau
 
 ---
 
-*Last updated: 2026-02-10 - Lesson 2.2 complete, task-tracker component built with signal/computed/effect*
+*Last updated: 2026-02-10 - Lesson 2.3 complete, refactored task-tracker with input/output/model signals*

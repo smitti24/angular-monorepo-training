@@ -1,9 +1,11 @@
 import { Component, computed, effect, signal } from '@angular/core';
 import { Task } from './task';
+import { TaskItem } from './components/task-item/task-item';
+import { TaskFilter } from './components/task-filter/task-filter';
 
 @Component({
   selector: 'app-task-tracker',
-  imports: [],
+  imports: [TaskItem, TaskFilter],
   templateUrl: './task-tracker.html',
   styleUrl: './task-tracker.css',
 })
