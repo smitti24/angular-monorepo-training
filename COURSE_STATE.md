@@ -77,8 +77,8 @@
 | 1.1 | What is NX? Monorepo Philosophy | ✅ Complete |
 | 1.2 | Creating Your First NX Workspace | ✅ Complete |
 | 1.3 | NX CLI & Essential Commands | ✅ Complete |
-| 1.4 | Understanding nx.json & project.json | 🟡 In Progress |
-| 1.5 | Dependency Graph & Affected Commands | ⬜ Not Started |
+| 1.4 | Understanding nx.json & project.json | ✅ Complete |
+| 1.5 | Dependency Graph & Affected Commands | 🟡 In Progress |
 
 ### Module 2: Angular Signals Deep Dive
 | Lesson | Topic | Status |
@@ -169,7 +169,7 @@
 ## Current Position
 
 **Module:** 1 - NX Fundamentals
-**Lesson:** 1.4 - Understanding nx.json & project.json
+**Lesson:** 1.5 - Dependency Graph & Affected Commands
 **Status:** 🟡 In Progress
 
 ---
