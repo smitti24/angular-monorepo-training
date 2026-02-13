@@ -40,12 +40,13 @@
 - 10 years Angular experience - understands core concepts deeply
 - Tech Lead - can grasp architectural decisions quickly
 - Questions industry best practices rather than blindly following instructions (good instinct)
+- Caught architectural inconsistency between lesson theory (shared/ui = generic) and exercise (put domain components there)
 
 ### Areas to Reinforce
 - *(Add as patterns emerge)*
 
 ### Common Mistakes Made
-- *(Add as patterns emerge)*
+- **Claude error (3.2):** Instructed to put domain-specific components (TaskItem, TaskFilter) into `shared/ui` — should have been `tasks/ui`. Always apply domain-driven organization consistently.
 
 ---
 
@@ -55,7 +56,7 @@
 |--------|-------|---------|--------|
 | 1 | NX Fundamentals | 5 | ✅ Complete |
 | 2 | Angular Signals Deep Dive | 4 | ✅ Complete |
-| 3 | NX Libraries & Architecture | 4 | ⬜ Not Started |
+| 3 | NX Libraries & Architecture | 4 | 🟡 In Progress |
 | 4 | Tailwind in NX | 2 | ⬜ Not Started |
 | 5 | Storybook in NX | 4 | ⬜ Not Started |
 | 6 | Microfrontend Concepts | 3 | ⬜ Not Started |
@@ -91,8 +92,8 @@
 ### Module 3: NX Libraries & Architecture
 | Lesson | Topic | Status |
 |--------|-------|--------|
-| 3.1 | Library Types (Feature, UI, Data-Access, Util) | ⬜ Not Started |
-| 3.2 | Creating & Organizing Libraries | ⬜ Not Started |
+| 3.1 | Library Types (Feature, UI, Data-Access, Util) | ✅ Complete |
+| 3.2 | Creating & Organizing Libraries | 🟡 In Progress |
 | 3.3 | Enforcing Boundaries with Tags | ⬜ Not Started |
 | 3.4 | Buildable vs Publishable Libraries | ⬜ Not Started |
 
@@ -169,8 +170,8 @@
 ## Current Position
 
 **Module:** 3 - NX Libraries & Architecture
-**Lesson:** 3.1 - Library Types (Feature, UI, Data-Access, Util)
-**Status:** ⬜ Not Started
+**Lesson:** 3.2 - Creating & Organizing Libraries
+**Status:** 🟡 In Progress
 
 ---
 
@@ -296,7 +297,15 @@ angular-monorepo-training/          ← Git repo root + NX workspace root
 │   │   │   │   ├── app.html        ← Root template
 │   │   │   │   ├── app.css         ← Component styles
 │   │   │   │   ├── app.spec.ts     ← Unit test (Vitest)
-│   │   │   │   └── nx-welcome.ts   ← NX placeholder component
+│   │   │   │   ├── nx-welcome.ts   ← NX placeholder component
+│   │   │   │   └── task-tracker/   ← Task tracker feature (Module 2)
+│   │   │   │       ├── task-tracker.ts/html/css
+│   │   │   │       ├── task.ts                    ← Task interface
+│   │   │   │       ├── store/
+│   │   │   │       │   └── task.store.ts          ← Signal store
+│   │   │   │       └── components/
+│   │   │   │           ├── task-item/             ← input() + output()
+│   │   │   │           └── task-filter/           ← model() + input()
 │   │   │   ├── main.ts             ← Bootstrap (bootstrapApplication)
 │   │   │   ├── styles.css          ← Global styles
 │   │   │   └── index.html
@@ -358,6 +367,13 @@ npx nx affected -t test --parallel=5                  # Control parallelism
 **Q: Is nesting the NX workspace inside a subdirectory the recommended industry standard?**
 A: No. The standard is NX workspace at the **root** of the git repo. Nesting causes friction with NX Console (VS Code extension), CI/CD pipelines, NX CLI (always needing to cd), and NX Cloud. Non-NX files like COURSE_STATE.md can coexist at root without issues. `create-nx-workspace` generates at root by default for this reason.
 
+### Lesson 3.2
+**Q: Why couldn't I generate libraries without the buildable flag?**
+A: NX 22's `@nx/angular:library` interactive prompt for "bundler" doesn't offer a clear "none" option. Selecting any bundler adds `ng-package.json` and `ng-packagr-lite` automatically. Fix: explicitly pass `--buildable=false` to get non-buildable libraries. Non-buildable = compiled inline with the app (faster dev), buildable = separately compiled with ng-packagr (needed for publishable/independent deploys).
+
+**Q: Why does `export { Task }` fail with isolatedModules?**
+A: When `isolatedModules: true`, TypeScript requires `export type { Task }` for type-only re-exports so it knows the import can be safely erased at compile time.
+
 ---
 
 ## Feedback Log
@@ -393,7 +409,7 @@ A: No. The standard is NX workspace at the **root** of the git repo. Nesting cau
 | Date | Update |
 |------|--------|
 | Session 1 | Course initialized, ready to begin Module 1 |
-| Session 2 | Added Module 5: Storybook in NX. Completed Module 1 (Lessons 1.2-1.5). |
+| Session 2 | Added Module 5: Storybook in NX. Completed Modules 1-2. Built task-tracker with signal store pattern. |
 
 ---
 

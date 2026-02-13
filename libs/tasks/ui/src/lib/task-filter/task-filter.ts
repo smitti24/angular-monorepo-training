@@ -1,7 +1,7 @@
 import { Component, input, model } from '@angular/core';
 
 @Component({
-  selector: 'app-task-filter',
+  selector: 'ui-task-filter',
   imports: [],
   templateUrl: './task-filter.html',
   styleUrl: './task-filter.css',

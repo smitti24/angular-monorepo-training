@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NxWelcome } from './nx-welcome';
-import { TaskTracker } from './task-tracker/task-tracker';
+import { TaskTracker } from '@nx-mf-training/feature';
 
 @Component({
-  imports: [NxWelcome, RouterModule, TaskTracker],
+  imports: [RouterModule, TaskTracker],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',

@@ -1,8 +1,8 @@
 {
-  "name": "feature",
+  "name": "tasks-ui",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/tasks/feature/src",
-  "prefix": "lib",
+  "sourceRoot": "libs/tasks/ui/src",
+  "prefix": "ui",
   "projectType": "library",
   "tags": [],
   "targets": {

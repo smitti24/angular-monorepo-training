@@ -1,5 +1,5 @@
 {
-  "name": "@nx-mf-training/ui",
+  "name": "@nx-mf-training/shared-ui",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^21.1.0",

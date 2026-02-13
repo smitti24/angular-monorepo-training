@@ -1,22 +1,22 @@
 import { Component, input, output } from '@angular/core';
-import { Task } from '../../task';
+import { Task } from '@nx-mf-training/data-access';
 
 @Component({
-  selector: 'app-task-item',
+  selector: 'ui-task-item',
   imports: [],
   templateUrl: './task-item.html',
   styleUrl: './task-item.css',
 })
 export class TaskItem {
-  task = input.required<Task>()
-  toggleTask = output<number>()
-  removeTask = output<number>()
+  task = input.required<Task>();
+  toggleTask = output<number>();
+  removeTask = output<number>();
 
   onToggleTask(id: number): void {
-    this.toggleTask.emit(id)
+    this.toggleTask.emit(id);
   }
 
   onRemoveTask(id: number): void {
-    this.removeTask.emit(id)
+    this.removeTask.emit(id);
   }
 }

@@ -15,10 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nx-mf-training/ui": ["libs/shared/ui/src/index.ts"],
       "@nx-mf-training/util": ["libs/shared/util/src/index.ts"],
       "@nx-mf-training/data-access": ["libs/tasks/data-access/src/index.ts"],
-      "@nx-mf-training/feature": ["libs/tasks/feature/src/index.ts"]
+      "@nx-mf-training/feature": ["libs/tasks/feature/src/index.ts"],
+      "@nx-mf-training/tasks/ui": ["libs/tasks/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
