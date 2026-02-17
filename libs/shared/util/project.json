@@ -4,7 +4,10 @@
   "sourceRoot": "libs/shared/util/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": [
+    "type:util",
+    "scope:shared"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/angular:unit-test",

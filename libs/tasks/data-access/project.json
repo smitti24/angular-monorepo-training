@@ -4,7 +4,10 @@
   "sourceRoot": "libs/tasks/data-access/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": [
+    "type:data-access",
+    "scope:tasks"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/angular:unit-test",

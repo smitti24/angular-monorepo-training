@@ -93,8 +93,8 @@
 | Lesson | Topic | Status |
 |--------|-------|--------|
 | 3.1 | Library Types (Feature, UI, Data-Access, Util) | ✅ Complete |
-| 3.2 | Creating & Organizing Libraries | 🟡 In Progress |
-| 3.3 | Enforcing Boundaries with Tags | ⬜ Not Started |
+| 3.2 | Creating & Organizing Libraries | ✅ Complete |
+| 3.3 | Enforcing Boundaries with Tags | ✅ Complete |
 | 3.4 | Buildable vs Publishable Libraries | ⬜ Not Started |
 
 ### Module 4: Tailwind in NX
@@ -170,8 +170,8 @@
 ## Current Position
 
 **Module:** 3 - NX Libraries & Architecture
-**Lesson:** 3.2 - Creating & Organizing Libraries
-**Status:** 🟡 In Progress
+**Lesson:** 3.4 - Buildable vs Publishable Libraries
+**Status:** ⬜ Not Started
 
 ---
 
@@ -274,6 +274,37 @@
 - Signal store pattern: private writable signals + public `asReadonly()` + named mutation methods
 - `asReadonly()` prevents consumers from bypassing store methods to mutate state directly
 - Computed/derived state lives in the store — shared across all consumers
+- Effects belong in components (view concerns), not stores (pure state containers)
+- Component becomes thin: `inject(Store)`, expose signals, delegate mutations
+
+### Lesson 3.1
+- Four library types: **Feature** (smart components), **UI** (presentational), **Data-Access** (state/services), **Util** (helpers/pipes)
+- Domain grouping folders (`tasks/`, `users/`) organize libs by business domain
+- `shared/` folder = truly cross-domain reusable code only
+- Rule: if code knows about a domain concept, it goes under that domain folder
+
+### Lesson 3.2
+- **Apps are thin** — compose libraries, nothing else. Shell just imports TaskTracker from feature lib.
+- **Barrel files (`index.ts`)** = library's public API contract. Only exported code is importable.
+- **Relative imports** within same library, **workspace aliases** (`@nx-mf-training/...`) across libraries
+- **Domain-driven organization**: TaskItem/TaskFilter → `tasks/ui` (not `shared/ui`), Task interface → `tasks/data-access` (not `shared/util`)
+- Non-buildable libraries compile inline with the app (no separate build step, works with esbuild)
+- NX 22 gotcha: `vitest-angular` test runner requires buildable — bypass with `--unitTestRunner=none` then add test target manually
+- NX requires unique project names across workspace — use scoped names (`tasks-ui` vs `ui`)
+- `export type { Task }` required with `isolatedModules: true` for type-only re-exports
+- `nx graph` validates architecture visually — domain libs connected, shared libs isolated
+
+### Lesson 3.3
+- **Tags are two-dimensional**: `type:` (architectural layer) + `scope:` (business domain)
+- `@nx/enforce-module-boundaries` ESLint rule validates imports based on tags
+- Layer rules: app→feature→ui→data-access→util (no skipping layers upward)
+- Scope rules: domain libs can depend on same domain or shared; shared only on shared
+- Circular dependencies automatically detected and blocked
+- VS Code ESLint integration gives real-time feedback (red lines, auto-fix on save)
+- In CI: `nx run-many -t lint` blocks PRs with boundary violations
+- Property name: `onlyDependOnLibsWithTags` (not `onlyDependsOnLibsWithTags`)
+- `asReadonly()` prevents consumers from bypassing store methods to mutate state directly
+- Computed/derived state lives in the store — shared across all consumers
 - `providedIn: 'root'` = singleton; component-level `providers` = scoped instance per component
 - Effects belong in components (view concerns), not stores (pure state containers)
 - Component becomes thin: `inject(Store)`, expose signals, delegate mutations
@@ -288,40 +319,43 @@
 ```
 angular-monorepo-training/          ← Git repo root + NX workspace root
 ├── apps/
-│   ├── shell/                      ← Angular 21 standalone app (MF host)
+│   ├── shell/                      ← Angular 21 standalone app (MF host) — THIN
 │   │   ├── src/
 │   │   │   ├── app/
-│   │   │   │   ├── app.ts          ← Root component (standalone)
+│   │   │   │   ├── app.ts          ← Root component (imports TaskTracker from feature lib)
 │   │   │   │   ├── app.config.ts   ← App providers (router, etc.)
 │   │   │   │   ├── app.routes.ts   ← Route definitions
-│   │   │   │   ├── app.html        ← Root template
-│   │   │   │   ├── app.css         ← Component styles
-│   │   │   │   ├── app.spec.ts     ← Unit test (Vitest)
-│   │   │   │   ├── nx-welcome.ts   ← NX placeholder component
-│   │   │   │   └── task-tracker/   ← Task tracker feature (Module 2)
-│   │   │   │       ├── task-tracker.ts/html/css
-│   │   │   │       ├── task.ts                    ← Task interface
-│   │   │   │       ├── store/
-│   │   │   │       │   └── task.store.ts          ← Signal store
-│   │   │   │       └── components/
-│   │   │   │           ├── task-item/             ← input() + output()
-│   │   │   │           └── task-filter/           ← model() + input()
+│   │   │   │   ├── app.html / app.css
+│   │   │   │   └── app.spec.ts     ← Unit test (Vitest)
 │   │   │   ├── main.ts             ← Bootstrap (bootstrapApplication)
 │   │   │   ├── styles.css          ← Global styles
 │   │   │   └── index.html
 │   │   ├── public/favicon.ico
 │   │   ├── project.json            ← NX project config (targets)
-│   │   ├── tsconfig.json
-│   │   ├── tsconfig.app.json
-│   │   ├── tsconfig.spec.json
+│   │   ├── tsconfig.json / tsconfig.app.json / tsconfig.spec.json
 │   │   └── eslint.config.mjs
 │   └── shell-e2e/                  ← Playwright E2E tests
 │       ├── src/example.spec.ts
 │       ├── playwright.config.ts
 │       └── project.json
+├── libs/
+│   ├── tasks/                      ← Domain grouping folder
+│   │   ├── feature/                ← Smart/container components
+│   │   │   └── src/lib/feature/task-tracker/  ← TaskTracker (orchestrates UI + store)
+│   │   ├── ui/                     ← Presentational/dumb components (project: tasks-ui)
+│   │   │   └── src/lib/
+│   │   │       ├── task-item/      ← TaskItem (input + output signals)
+│   │   │       └── task-filter/    ← TaskFilter (model + input signals)
+│   │   └── data-access/            ← State management + domain models
+│   │       └── src/lib/data-access/
+│   │           ├── task.store.ts   ← Signal store (private signals + asReadonly + mutations)
+│   │           └── task.ts         ← Task interface (domain model)
+│   └── shared/                     ← Cross-domain reusable code
+│       ├── ui/                     ← (empty — future: buttons, modals, etc.)
+│       └── util/                   ← (empty — future: pipes, helpers, etc.)
 ├── nx.json                         ← Workspace config (targets, plugins, generator defaults)
 ├── package.json                    ← Angular 21, NX 22, Vitest 4, Playwright
-├── tsconfig.base.json
+├── tsconfig.base.json              ← Path aliases: @nx-mf-training/feature, /data-access, /tasks/ui
 ├── COURSE_STATE.md
 └── README.md
 ```
@@ -374,6 +408,12 @@ A: NX 22's `@nx/angular:library` interactive prompt for "bundler" doesn't offer 
 **Q: Why does `export { Task }` fail with isolatedModules?**
 A: When `isolatedModules: true`, TypeScript requires `export type { Task }` for type-only re-exports so it knows the import can be safely erased at compile time.
 
+**Q: Should domain-specific code (TaskItem, Task interface) go in shared/ folders?**
+A: No. The `shared/` grouping folder is reserved for truly cross-domain, reusable code (buttons, pipes, loggers). If code references a domain concept like `Task`, it belongs under that domain's folder (`tasks/ui`, `tasks/data-access`). Rule of thumb: "If it knows about Task, it goes under tasks/."
+
+**Q: Why can't I generate non-buildable libraries with vitest-angular?**
+A: NX 22's `@nx/angular:library` generator enforces that `vitest-angular` requires buildable/publishable. Workaround: generate with `--unitTestRunner=none` then manually add the test target to `project.json`. The `@nx/angular:unit-test` executor works fine on non-buildable libs — it's only a generator constraint.
+
 ---
 
 ## Feedback Log
@@ -410,7 +450,8 @@ A: When `isolatedModules: true`, TypeScript requires `export type { Task }` for 
 |------|--------|
 | Session 1 | Course initialized, ready to begin Module 1 |
 | Session 2 | Added Module 5: Storybook in NX. Completed Modules 1-2. Built task-tracker with signal store pattern. |
+| Session 3 | Completed Lesson 3.2. Moved code from shell into domain libraries. Fixed architectural mistake (domain code was in shared/ — moved to tasks/). Generated tasks/ui library. |
 
 ---
 
-*Last updated: 2026-02-10 - Module 2 complete, ready for Module 3: NX Libraries & Architecture*
+*Last updated: 2026-02-12 - Lesson 3.3 complete, ready for Lesson 3.4: Buildable vs Publishable Libraries*

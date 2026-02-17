@@ -4,7 +4,10 @@
   "sourceRoot": "libs/tasks/ui/src",
   "prefix": "ui",
   "projectType": "library",
-  "tags": [],
+  "tags": [
+    "type:ui",
+    "scope:tasks"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/angular:unit-test",
